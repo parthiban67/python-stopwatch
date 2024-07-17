@@ -1,15 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
+from menu.menubar import MenuBar
 
 if __name__ == '__main__':
     root = tk.Tk()
     frame = ttk.Frame(root, width = 300, height = 300)
 
-    menubar = tk.Menu(root)
-    exitMenu = tk.Menu(menubar)
-    menubar.add_cascade(menu=exitMenu, label="Exit")
+    menubar = MenuBar(frame, lambda r=root: r.destroy())
+    root['menu'] = menubar.getMenuBar()
 
-    root['menu'] = menubar
     frame.grid()
     root.title("Stopwatch")
     root.mainloop()
