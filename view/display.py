@@ -5,13 +5,16 @@ from tkinter import E
 
 class Display():
     
-    def __init__(self,parent):
+    def __init__(self,parent,width,height):
+        style = ttk.Style()
+        style.configure('frame1.TFrame', background="black")
+        self.frame = ttk.Frame(parent,width=width,height=height,style='frame1.TFrame')
         self.parent = parent
         self.setupLabel()
         
     def setupLabel(self):
-        labelFont = font.Font(family='Helvetica',weight='normal',size=24)
-        frame = ttk.Frame(self.parent)
+        labelFont = font.Font(family='Helvetica',weight='normal',size=28)
+        frame = ttk.Frame(self.frame)
         self.hourLabel = ttk.Label(frame,text="00",foreground="red",background="black",font=labelFont,anchor='center', justify='center')
         self.hourLabel.grid(row=0,column=1,sticky=(E,W))
         
@@ -32,4 +35,7 @@ class Display():
         frame.columnconfigure(4,weight=1)
         frame.columnconfigure(5,weight=1)
         frame.columnconfigure(7,weight=1)
-        frame.pack(fill='x' ,pady=5,padx=30, expand=True)
+        frame.pack(fill='x' ,pady=24,padx=32, expand=True)
+        
+    def getFrame(self):
+        return self.frame
