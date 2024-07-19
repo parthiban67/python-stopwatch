@@ -17,7 +17,7 @@ if __name__ == '__main__':
     Display(displayFrame)
     displayFrame.grid(column=0,row=0,sticky=(tk.N,tk.S,tk.E,tk.W))
     
-    controller = Controller(frame,300,200)
+    controller = Controller(frame,300,0)
     controller.getFrame().grid(column=0,row=1,sticky=(tk.N,tk.S,tk.E,tk.W))
     
     frame.rowconfigure(0,weight=1)
@@ -25,4 +25,5 @@ if __name__ == '__main__':
     frame.columnconfigure(0,weight=1)
     frame.pack(fill=tk.BOTH, expand=True)
     root.title("Stopwatch")
+    root.resizable(False,False)
     root.mainloop()
