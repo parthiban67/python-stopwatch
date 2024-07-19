@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from menu.menubar import MenuBar
 from view.display import Display
+from controller.controller import Controller
 
 if __name__ == '__main__':
     root = tk.Tk()
@@ -15,9 +16,10 @@ if __name__ == '__main__':
     displayFrame = ttk.Frame(frame, style='frame1.TFrame', width = 300)
     Display(displayFrame)
     displayFrame.grid(column=0,row=0,sticky=(tk.N,tk.S,tk.E,tk.W))
-    controlFrame = ttk.Frame(frame, width = 300)
-    controlFrame.grid(column=0,row=1,sticky=(tk.N,tk.S,tk.E,tk.W))
-
+    
+    controller = Controller(frame,300,200)
+    controller.getFrame().grid(column=0,row=1,sticky=(tk.N,tk.S,tk.E,tk.W))
+    
     frame.rowconfigure(0,weight=1)
     frame.rowconfigure(1,weight=1)
     frame.columnconfigure(0,weight=1)
