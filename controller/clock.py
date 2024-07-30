@@ -7,11 +7,13 @@ class Clock():
         self.initiated = False
         self.condition = Condition(Lock())
         self.pauseDict = dict(pause=False)
+        self.resetEvent = Event()
     
     def start(self):
         if not self.initiated:
+            self.resetEvent.clear()
             self.initiated = True
-            self.worker = Worker(self.condition,self.pauseDict)
+            self.worker = Worker(self.condition,self.pauseDict,self.resetEvent)
             self.worker.start()
         else:
             waker = Waker(self.condition,self.pauseDict)
@@ -21,7 +23,9 @@ class Clock():
         self.worker.doPause()
     
     def reset(self):
-        pass
+        self.initiated = False
+        self.resetEvent.set()
+        sleep(0.010)
 
 class TimeData(local):
     
@@ -51,18 +55,21 @@ class TimeData(local):
     
 class Worker(Thread):
     
-    def __init__(self,condition,pauseDict):
+    def __init__(self,condition,pauseDict,resetEvent):
         Thread.__init__(self)
         self.condition = condition
         self.daemon = True
         self.data = TimeData(0,0,0)
         self.pauseDict = pauseDict
+        self.resetEvent = resetEvent
     
     def doPause(self):
         self.pauseDict['pause'] = True
         
     def run(self):
         while True:
+            if self.resetEvent.is_set():
+                break
             with self.condition:
                 while self.pauseDict['pause']:
                     self.condition.wait()

@@ -17,7 +17,7 @@ class Controller():
         stopBtn = ttk.Button(buttonFrame,text="Stop",command=lambda : self.clock.stop())
         stopBtn.grid(row=0,column=1,padx=5)
         
-        resetBtn = ttk.Button(buttonFrame,text="Reset")
+        resetBtn = ttk.Button(buttonFrame,text="Reset",command=lambda : self.clock.reset())
         resetBtn.grid(row=0,column=2,padx=5)
         
         buttonFrame.pack(fill='x',expand=True, pady=30, padx=10)
