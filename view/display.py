@@ -5,7 +5,8 @@ from tkinter import E
 
 class Display():
     
-    def __init__(self,parent,width,height):
+    def __init__(self,parent,width,height,root):
+        self.root = root
         style = ttk.Style()
         style.configure('frame1.TFrame', background="black")
         self.frame = ttk.Frame(parent,width=width,height=height,style='frame1.TFrame')
@@ -36,6 +37,15 @@ class Display():
         frame.columnconfigure(5,weight=1)
         frame.columnconfigure(7,weight=1)
         frame.pack(fill='x' ,pady=24,padx=32, expand=True)
+    
+    def setHourLabel(self,text):
+        self.root.after(0,lambda t=text : self.hourLabel.config(text=t))
+        
+    def setMinuteLabel(self,text):
+        self.root.after(0,lambda t=text : self.minuteLabel.config(text=t))
+        
+    def setSecondLabel(self,text):
+        self.root.after(0,lambda t=text : self.secondLabel.config(text=t))
         
     def getFrame(self):
         return self.frame

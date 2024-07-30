@@ -11,10 +11,10 @@ if __name__ == '__main__':
     menubar = MenuBar(frame, lambda r=root: r.destroy())
     root['menu'] = menubar.getMenuBar()
 
-    display = Display(frame,300,200)
+    display = Display(frame,300,200,root)
     display.getFrame().grid(column=0,row=0,sticky=(tk.N,tk.S,tk.E,tk.W))
     
-    controller = Controller(frame,300,200)
+    controller = Controller(frame,300,200,display)
     controller.getFrame().grid(column=0,row=1,sticky=(tk.N,tk.S,tk.E,tk.W))
     
     frame.rowconfigure(0,weight=1)

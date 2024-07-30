@@ -3,17 +3,18 @@ from time import sleep
 
 class Clock():
     
-    def __init__(self):
+    def __init__(self,listener):
         self.initiated = False
         self.condition = Condition(Lock())
         self.pauseDict = dict(pause=False)
         self.resetEvent = Event()
+        self.listener = listener
     
     def start(self):
         if not self.initiated:
             self.resetEvent.clear()
             self.initiated = True
-            self.worker = Worker(self.condition,self.pauseDict,self.resetEvent)
+            self.worker = Worker(self.condition,self.pauseDict,self.resetEvent,self.listener)
             self.worker.start()
         else:
             waker = Waker(self.condition,self.pauseDict)
@@ -55,13 +56,14 @@ class TimeData(local):
     
 class Worker(Thread):
     
-    def __init__(self,condition,pauseDict,resetEvent):
+    def __init__(self,condition,pauseDict,resetEvent,listener):
         Thread.__init__(self)
         self.condition = condition
         self.daemon = True
         self.data = TimeData(0,0,0)
         self.pauseDict = pauseDict
         self.resetEvent = resetEvent
+        self.listener = listener
     
     def doPause(self):
         self.pauseDict['pause'] = True
@@ -69,6 +71,7 @@ class Worker(Thread):
     def run(self):
         while True:
             if self.resetEvent.is_set():
+                self.listener(0,0,0)
                 break
             with self.condition:
                 while self.pauseDict['pause']:
@@ -89,8 +92,9 @@ class Worker(Thread):
                         minReset = True
                 if minReset:
                     self.data.setHr(self.data.getHr() + 1)
-                    
-                print(str(self.data.getHr())+":"+str(self.data.getMin())+":"+str(self.data.getSec()))
+                
+                self.listener(self.data.getHr(),self.data.getMin(),self.data.getSec())    
+                # print(str(self.data.getHr())+":"+str(self.data.getMin())+":"+str(self.data.getSec()))
 
 class Waker(Thread):
     

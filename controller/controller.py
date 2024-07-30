@@ -3,12 +3,18 @@ from .clock import Clock
 
 class Controller():
     
-    def __init__(self,parent,width,height):
+    def __init__(self,parent,width,height,display):
         self.width = width
         self.frame = ttk.Frame(parent,width=self.width,height=height)
-        self.clock = Clock()
+        self.display = display
+        self.clock = Clock(self.clockOnTick)
         self.setupButtons()
-        
+    
+    def clockOnTick(self,hr,min,sec):
+        self.display.setHourLabel(str(hr).zfill(2))
+        self.display.setMinuteLabel(str(min).zfill(2))
+        self.display.setSecondLabel(str(sec).zfill(2))
+    
     def setupButtons(self):
         buttonFrame = ttk.Frame(self.frame,width=self.width)
         startBtn = ttk.Button(buttonFrame,text="Start",command=lambda : self.clock.start())
